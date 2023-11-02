@@ -1,41 +1,27 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-// export const getContacts = (state) => state.contacts;
-// export const getFilter = (state) => state.filter;
+export const selectContacts = state => {
+  return state.contactsHandler.contacts.items;
+};
 
-// export const getIsLoading = state => state.contacts.isLoading;
-// export const getError = state => state.contacts.error;
+export const selectorFilter = state => {
+  // console.log('selectorFilter:>>', state)
+  // console.log('selectorFilter:>>', state.filterHandler)
+  // console.log('selectorFilter:>>', state.filterHandler.filter)
 
+  return state.filterHandler;
+};
 
-// export const getContacts = state => {
-//   return state.contactsHandler.contacts.items;
-// };
-
-// export const selectorFilter = state => {
-//   return state.filterHandler;
-// };
-
-// export const selectorVisible = createSelector(
-//   [getContacts, selectorFilter],
-//   (contacts, filter) => {
-//     if (filter) {
-//       return contacts.filter(one =>
-//         one.contactName.toLowerCase().includes(filter.toLowerCase())
-//       );
-//     } else return contacts;
-//   }
-// );
-
-export const selectContacts = state => state.contacts.contacts || [];
-export const selectIsLoading = state => state.contacts.isLoading;
-export const selectError = state => state.contacts.error;
-
-export const selectFilter = state => state.filter.filter;
-export const selectVisibleContacts = createSelector(
-  [selectContacts, selectFilter],
+export const selectVisible = createSelector(
+  [selectContacts, selectorFilter],
   (contacts, filter) => {
-    return contacts.filter(contact =>
-            contact.name.toLowerCase().includes(filter.toLowerCase())
-    )
+    // console.log('selector contacts:>>', contacts)
+    // console.log('selector filter:>>', filter)
+
+    if (filter) {
+      return contacts.filter(one =>
+        one.contactName.toLowerCase().includes(filter.toLowerCase())
+      );
+    } else return contacts;
   }
 );

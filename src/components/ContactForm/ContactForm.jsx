@@ -16,7 +16,6 @@ const Form = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
-  //
   const createContact = (contactName, number) => {
     const alreadyExist = contacts.find(
       item => item.contactName === contactName
