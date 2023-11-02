@@ -3,20 +3,20 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { Label, Input, Button } from './ContactForm.styles';
 
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/slice';
-import { selectorContacts } from '../../redux/selectors';
+import { selectContacts } from 'redux/selectors';
+import { addContacts } from 'redux/thunk';
+
 
 const Form = () => {
   const [contactName, setContactName] = useState('');
   const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
-  const contacts = useSelector(selectorContacts);
+  const contacts = useSelector(selectContacts);
 
-
+  //
   const createContact = (contactName, number) => {
     const alreadyExist = contacts.find(
       item => item.contactName === contactName
@@ -28,7 +28,8 @@ const Form = () => {
       contactName,
       number,
     };
-    dispatch(addContact(newContact));
+
+    dispatch(addContacts(newContact));
   };
 
   //change

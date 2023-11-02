@@ -4,20 +4,20 @@ import React from 'react';
 
 import { ContactName, ContactNumber, DeleteBtn } from './ContactItem.styles';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/slice';
+import { deleteContacts } from 'redux/thunk';
 
-const ContactItem = ({ item }) => {
+const ContactItem = ({ contact }) => {
   const dispatch = useDispatch();
 
-  const handleDelete = id => {
-    dispatch(deleteContact(id));
+  const handleDelete = () => {
+    dispatch(deleteContacts(contact.id));
   };
 
   return (
     <li style={{ marginBottom: 20 }}>
-      <ContactName>{item.contactName}</ContactName>
-      <ContactNumber>{item.number}</ContactNumber>
-      <DeleteBtn type="button" onClick={() => handleDelete(item.id)}>
+      <ContactName>{contact .contactName}</ContactName>
+      <ContactNumber>{contact .number}</ContactNumber>
+      <DeleteBtn type="button" onClick={() => handleDelete(contact .id)}>
         ✖ Delete
       </DeleteBtn>
     </li>
