@@ -1,42 +1,70 @@
 
-
 import React from 'react';
-import { useSelector } from 'react-redux';
 import ContactItem from '../ContactItem/ContactItem';
-// import {useDispatch, useSelector } from 'react-redux';
-import { selectVisible } from 'redux/selectors';
+import { useSelector } from 'react-redux';
+import { getContacts, getFilter } from 'store/selectors';
 import { ContactListContainer } from './ContactList.styles';
-// import { fetchContacts } from 'redux/thunk';
 
 
-  const ContactList = () => {
-  const filteredContacts = useSelector(selectVisible);
+const ContactList = () => {
+  const {contacts} = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+
+  const filteredContacts = (filter, contacts) => {
+  if (!filter) return contacts;
+
+  return contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+};
+  const visibleContacts = filteredContacts(filter, contacts);
+
 
   return (
     <ContactListContainer>
-      {filteredContacts &&
-        filteredContacts.map(({ id, name, phone }) => (
-          <ContactItem key={id} name={name} phone={phone} id={id} />
-        ))}
+      {(visibleContacts ?? contacts).map(contact => (
+        <ContactItem
+          key={contact.id}
+          contact={contact}
+        />
+      ))}
     </ContactListContainer>
   );
 };
 
+export default ContactList;
+
+
+
+
+
+
+// const ContactList = () => {
+//   const {contacts} = useSelector(selectContacts);
+//   const filter = useSelector(selectorFilter);
+
+//   const filteredContacts = (filter, contacts) => {
+//   if (!filter) return contacts;
+
+//   return contacts.filter(contact =>
+//     contact.name.toLowerCase().includes(filter.toLowerCase())
+//   );
+// };
+//   const visibleContacts = filteredContacts(filter, contacts);
+
+
 //   return (
 //     <ContactListContainer>
-//       {newContArr.map(contact => (
-//         <List key={contact.id}>
-//           {contact.contactName}: {contact.number}
-//           <DeleteBtn
-//             className="DeleteBtn"
-//             onClick={() => handleDeleteContact(contact.id)}
-//           >
-//             Delete
-//           </DeleteBtn>
-//         </List>
+//       {(visibleContacts ?? []).map(contact => (
+//         contact.name && (
+//         <ContactItem
+//       key={contact.id}
+//       contact={contact}
+//         />
+//         )
 //       ))}
 //     </ContactListContainer>
 //   );
 // };
 
-export default ContactList;
+// export default ContactList;

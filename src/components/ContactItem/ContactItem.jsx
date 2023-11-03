@@ -1,26 +1,25 @@
-
-
 import React from 'react';
-
-import { ContactName, ContactNumber, DeleteBtn } from './ContactItem.styles';
+import {ContactItemContainer, ContactInfo, ContactName, DeleteBtn, ContactNumber} from './ContactItem.styles';
 import { useDispatch } from 'react-redux';
-import { deleteContacts } from 'redux/thunk';
+import { deleteContacts } from 'store/thunk';
+// import { deleteContact } from 'store/contactsSlice';
 
 const ContactItem = ({ contact }) => {
+
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteContacts(contact.id));
-  };
+  dispatch(deleteContacts(contact.id));
+};
 
   return (
-    <li style={{ marginBottom: 20 }}>
-      <ContactName>{contact .contactName}</ContactName>
-      <ContactNumber>{contact .number}</ContactNumber>
-      <DeleteBtn type="button" onClick={() => handleDelete(contact .id)}>
-        ✖ Delete
-      </DeleteBtn>
-    </li>
+    <ContactItemContainer>
+      <ContactInfo>
+        <ContactName>Name: {contact.name}</ContactName>
+        <DeleteBtn onClick={handleDelete}>Delete</DeleteBtn>
+      </ContactInfo>
+      <ContactNumber>Phone: {contact.phone}</ContactNumber>
+    </ContactItemContainer>
   );
 };
 

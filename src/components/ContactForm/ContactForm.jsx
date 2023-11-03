@@ -1,85 +1,86 @@
 
 
-import { nanoid } from '@reduxjs/toolkit';
-import { Label, Input, Button } from './ContactForm.styles';
-
 import React, { useState } from 'react';
+import {ContactFormContainer, Form, Label, Input, Button} from './ContactForm.styles'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts } from 'redux/selectors';
-import { addContacts } from 'redux/thunk';
+// import { addContact } from 'store/thunk';
+import { nanoid } from '@reduxjs/toolkit';
+import { getContacts } from 'store/selectors';
+import { addContacts } from 'store/thunk';
 
 
-const Form = () => {
-  const [contactName, setContactName] = useState('');
-  const [number, setNumber] = useState('');
-
-  const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
-
-  const createContact = (contactName, number) => {
-    const alreadyExist = contacts.find(
-      item => item.contactName === contactName
-    );
-    if (alreadyExist) return alert(`Contact '${contactName}' already exist`);
-
-    const newContact = {
-      id: nanoid(),
-      contactName,
-      number,
-    };
-
-    dispatch(addContacts(newContact));
+const INITIAL_STATE = {
+    name: '',
+    phone: '',
   };
 
-  //change
-  const handleChange = ({ target: { value, name } }) => {
-    name === 'contactName' ? setContactName(value) : setNumber(value);
-    //console.log(value, name);
+  const ContactForm = () => {
+    const [formData, setFormData] = useState(INITIAL_STATE);
+
+    const { contacts } = useSelector(getContacts);
+
+    const nameId = nanoid();
+  const phoneId = nanoid();
+    
+    const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value.trim(),
+    }));
   };
 
-  //submit
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    createContact(contactName, number);
 
-    setContactName('');
-    setNumber('');
+    const existingContact = contacts.find(
+      contact => contact.name === formData.name
+    );
+    if (existingContact) {
+      return alert(`${formData.name} is already in contacts`);
+    }
+
+    dispatch(addContacts(formData));
+    setFormData(INITIAL_STATE);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Label>
-        <label htmlFor="nameInput">Name</label>
-        <Input
-          type="text"
-          name="contactName"
-          //pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          id="nameInput"
-          value={contactName}
-          onChange={handleChange}
-          autoFocus
-        />
-      </Label>
-
-      <Label>
-        <label htmlFor="telInput">Number</label>
-        <Input
-          type="tel"
-          name="number"
-          //pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          id="telInput"
-          value={number}
-          onChange={handleChange}
-        />
-      </Label>
-
-      <Button type="submit">Create</Button>
-    </form>
+    <ContactFormContainer>
+      <Form onSubmit={handleSubmit}>
+        <Label>
+          Name:
+          <Input
+            type="text"
+            name="name"
+            id={nameId}
+            pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Name"
+          />
+        </Label>
+        <Label>
+          Phone Number:
+          <Input
+            type="tel"
+            name="phone"
+            id={phoneId}
+            pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
+            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            required
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Phone Number"
+          />
+        </Label>
+        <Button type="submit">Add Contact</Button>
+      </Form>
+    </ContactFormContainer>
   );
 };
 
-export default Form;
+export default ContactForm;

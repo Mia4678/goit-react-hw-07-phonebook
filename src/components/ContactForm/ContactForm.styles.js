@@ -28,7 +28,7 @@ export const Button = styled('button')({
   transition: 'boxShadow, easy, 300ms; backgroundColor, easy, 300ms',
   cursor: 'pointer',
   borderRadius: 10,
-
+  backgroundColor: '#fa6ee9',
   marginBottom: 20,
 
   '&:hover, &:focus': {
@@ -36,7 +36,17 @@ export const Button = styled('button')({
     backgroundColor: '#e89e5d',
   },
 
-  '&:active': {
-    backgroundColor: '#965821',
-  },
+  
 });
+
+export const ContactFormContainer = styled.div`
+  background-color: #dda0dd;
+  padding: 20px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
