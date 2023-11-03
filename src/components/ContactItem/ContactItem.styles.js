@@ -30,7 +30,6 @@ export const DeleteBtn = styled('button')({
   cursor: 'pointer',
   borderRadius: 10,
   border: `0.5px solid ${aditionalColor}`,
-  backgroundColor: aditionalColor,
   padding: '0 15px',
   backgroundColor: '#fa6ee9',
   '&:hover, &:focus': {
